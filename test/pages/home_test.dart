@@ -455,7 +455,7 @@ void main() {
   testWidgets(
     'desktop navigation keeps the tools route when logs are enabled',
     (tester) async {
-      tester.view.physicalSize = const Size(1400, 1000);
+      tester.view.physicalSize = const Size(1400, 1400);
       tester.view.devicePixelRatio = 1;
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
@@ -463,7 +463,7 @@ void main() {
       final container = ProviderContainer();
       addTearDown(container.dispose);
       globalState.container = container;
-      container.read(viewSizeProvider.notifier).value = const Size(1400, 1000);
+      container.read(viewSizeProvider.notifier).value = const Size(1400, 1400);
       container.read(currentPageLabelProvider.notifier).toPage(PageLabel.tools);
 
       await tester.pumpWidget(
@@ -495,6 +495,7 @@ void main() {
             )
             .first,
       );
+      await tester.ensureVisible(logItem);
       await tester.tap(logItem);
       await tester.pumpAndSettle();
 
