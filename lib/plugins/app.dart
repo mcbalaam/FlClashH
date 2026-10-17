@@ -44,6 +44,10 @@ class App {
     return methodChannel.invokeMethod<bool>('moveTaskToBack');
   }
 
+  Future<String?> getAndroidId() {
+    return methodChannel.invokeMethod<String>('getAndroidId');
+  }
+
   Future<List<Package>> getPackages() async {
     final packagesString = await methodChannel.invokeMethod<String>(
       'getPackages',

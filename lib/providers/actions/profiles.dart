@@ -146,6 +146,7 @@ class ProfilesAction extends _$ProfilesAction {
       ref.read(profilesProvider.notifier).put(profile);
       final updated = await profile.update(
         validate: (path, key) => _core.validateProfile(path, key),
+        sendDeviceHeaders: ref.read(appSettingProvider).sendDeviceHeaders,
       );
       // The download can take minutes; edits and deletes made meanwhile win.
       final latest = ref.read(profilesProvider).getProfile(profile.id);
@@ -153,10 +154,12 @@ class ProfilesAction extends _$ProfilesAction {
         await clearEffect(profile.id);
         return;
       }
+      _showProviderHeaders(updated.providerHeaders);
       final newProfile = latest.copyWith(
         label: latest.label.takeFirstValid([updated.label]),
         subscriptionInfo: updated.subscriptionInfo,
         lastUpdateDate: updated.lastUpdateDate,
+        providerHeaders: updated.providerHeaders,
       );
       ref.read(profilesProvider.notifier).put(newProfile);
       if (profile.id == ref.read(currentProfileIdProvider)) {
@@ -369,6 +372,7 @@ class ProfilesAction extends _$ProfilesAction {
       title: currentAppLocalizations.addProfile,
     );
     if (profile != null) {
+      _showProviderHeaders(profile.providerHeaders);
       putProfile(profile);
     }
   }
@@ -403,7 +407,25 @@ class ProfilesAction extends _$ProfilesAction {
   Future<Profile> _download(Profile profile) {
     return profile.update(
       validate: (path, key) => _core.validateProfile(path, key),
+      sendDeviceHeaders: ref.read(appSettingProvider).sendDeviceHeaders,
     );
+  }
+
+  void _showProviderHeaders(Map<String, String> headers) {
+    if (headers['x-hwid-max-devices-reached']?.toLowerCase() == 'true') {
+      final announce = headers['announce'];
+      if (announce != null && announce.isNotEmpty) {
+        unawaited(
+          dialogs.showHwidMaxDevicesReached(
+            announce: announce,
+            supportUrl: headers['support-url'],
+          ),
+        );
+      }
+    }
+    if (headers['x-hwid-not-supported']?.toLowerCase() == 'true') {
+      unawaited(dialogs.showHwidNotSupported());
+    }
   }
 
   Future<Profile> _withAgeSecretKey(

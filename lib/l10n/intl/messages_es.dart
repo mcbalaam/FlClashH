@@ -952,6 +952,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "hoursAgo": m33,
     "hoursAgoShort": m34,
     "hue": MessageLookupByLibrary.simpleMessage("Tono"),
+    "hwidMaxDevicesReached": MessageLookupByLibrary.simpleMessage(
+      "Límite de dispositivos alcanzado",
+    ),
+    "hwidNotSupported": MessageLookupByLibrary.simpleMessage(
+      "La vinculación por HWID no es compatible con esta plataforma.",
+    ),
     "icon": MessageLookupByLibrary.simpleMessage("Icono"),
     "iconRecords": MessageLookupByLibrary.simpleMessage("Registros de iconos"),
     "iconSets": MessageLookupByLibrary.simpleMessage("Conjuntos de iconos"),
@@ -1736,6 +1742,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Selecciona una estrategia de división",
     ),
     "selected": MessageLookupByLibrary.simpleMessage("Seleccionado"),
+    "sendDeviceDataDesc": MessageLookupByLibrary.simpleMessage(
+      "Enviar el identificador y el modelo del dispositivo al servidor del proveedor proxy.",
+    ),
+    "sendDeviceDataTitle": MessageLookupByLibrary.simpleMessage("Enviar HWID"),
     "server": MessageLookupByLibrary.simpleMessage("Servidor"),
     "serviceAbnormalCount": m73,
     "serviceAllAvailable": MessageLookupByLibrary.simpleMessage(
@@ -1875,6 +1885,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "sudoPasswordTitle": MessageLookupByLibrary.simpleMessage(
       "Introduce tu contraseña para sudo",
     ),
+    "support": MessageLookupByLibrary.simpleMessage("Soporte"),
     "suspended": MessageLookupByLibrary.simpleMessage("Suspendido…"),
     "switchProfile": MessageLookupByLibrary.simpleMessage("Cambiar de perfil"),
     "sync": MessageLookupByLibrary.simpleMessage("Sincronizar"),

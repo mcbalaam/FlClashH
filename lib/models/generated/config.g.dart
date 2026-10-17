@@ -50,6 +50,7 @@ _AppSettingProps _$AppSettingPropsFromJson(
       RestoreStrategy.compatible,
   showTrayTitle: json['showTrayTitle'] as bool? ?? true,
   checkCertificate: json['checkCertificate'] as bool? ?? true,
+  sendDeviceHeaders: json['sendDeviceHeaders'] as bool? ?? true,
   userAgents:
       (_readUserAgents(json, 'userAgents') as List<dynamic>?)
           ?.map((e) => e as String)
@@ -112,6 +113,7 @@ Map<String, dynamic> _$AppSettingPropsToJson(_AppSettingProps instance) =>
       'restoreStrategy': _$RestoreStrategyEnumMap[instance.restoreStrategy]!,
       'showTrayTitle': instance.showTrayTitle,
       'checkCertificate': instance.checkCertificate,
+      'sendDeviceHeaders': instance.sendDeviceHeaders,
       'userAgents': instance.userAgents,
       'filters': instance.filters,
       'hideIp': instance.hideIp,

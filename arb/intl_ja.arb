@@ -939,5 +939,10 @@
   "customImportDroppedSubRules": "{count, plural, other{カスタム設定はサブルールに対応していないため、SUB-RULE ルール {label} 件を破棄しました}}",
   "autoInclude": "自動で含める",
   "allReferencedProxies": "参照されているすべてのプロキシ",
-  "allReferencedProxyProviders": "参照されているすべてのプロキシプロバイダー"
+  "allReferencedProxyProviders": "参照されているすべてのプロキシプロバイダー",
+  "hwidNotSupported": "このプラットフォームでは HWID の紐付けはサポートされていません。",
+  "hwidMaxDevicesReached": "デバイス数の上限に達しました",
+  "sendDeviceDataTitle": "HWID を送信",
+  "sendDeviceDataDesc": "デバイス識別子とモデルをプロキシプロバイダーのサーバーへ送信します。",
+  "support": "サポート"
 }

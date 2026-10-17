@@ -677,6 +677,7 @@ class SetupAction extends _$SetupAction {
     final nextProfile = await globalState.safeRun(
       () => profile?.checkAndUpdateAndCopy(
         validate: (path, key) => _core.validateProfile(path, key),
+        sendDeviceHeaders: ref.read(appSettingProvider).sendDeviceHeaders,
       ),
     );
     if (nextProfile != null) {

@@ -939,5 +939,10 @@
   "customImportDroppedSubRules": "{count, plural, =1{Se descartó 1 regla SUB-RULE, porque los perfiles personalizados no admiten subreglas} other{Se descartaron {label} reglas SUB-RULE, porque los perfiles personalizados no admiten subreglas}}",
   "autoInclude": "Incluir automáticamente",
   "allReferencedProxies": "Todos los proxies referenciados",
-  "allReferencedProxyProviders": "Todos los proveedores de proxies referenciados"
+  "allReferencedProxyProviders": "Todos los proveedores de proxies referenciados",
+  "hwidNotSupported": "La vinculación por HWID no es compatible con esta plataforma.",
+  "hwidMaxDevicesReached": "Límite de dispositivos alcanzado",
+  "sendDeviceDataTitle": "Enviar HWID",
+  "sendDeviceDataDesc": "Enviar el identificador y el modelo del dispositivo al servidor del proveedor proxy.",
+  "support": "Soporte"
 }

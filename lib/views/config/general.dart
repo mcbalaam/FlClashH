@@ -377,6 +377,11 @@ class GeneralView extends ConsumerWidget {
         select: (state) => state.autoCheckUpdate,
         update: (state, value) => state.copyWith(autoCheckUpdate: value),
       ),
+      _appSettingToggle(
+        title: (l) => l.sendDeviceDataTitle,
+        select: (state) => state.sendDeviceHeaders,
+        update: (state, value) => state.copyWith(sendDeviceHeaders: value),
+      ),
     ];
   }
 
@@ -450,7 +455,10 @@ class GeneralView extends ConsumerWidget {
           generateSection(
             title: appLocalizations.requestsAndUpdates,
             items: _requestItems(),
-            footer: appLocalizations.checkCertificateDesc,
+            footer: [
+              appLocalizations.checkCertificateDesc,
+              appLocalizations.sendDeviceDataDesc,
+            ].join('\n'),
           ),
           generateSection(
             title: appLocalizations.inbound,

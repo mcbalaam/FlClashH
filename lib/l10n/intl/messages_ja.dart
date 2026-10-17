@@ -758,6 +758,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "hoursAgo": m33,
     "hoursAgoShort": m34,
     "hue": MessageLookupByLibrary.simpleMessage("色相"),
+    "hwidMaxDevicesReached": MessageLookupByLibrary.simpleMessage(
+      "デバイス数の上限に達しました",
+    ),
+    "hwidNotSupported": MessageLookupByLibrary.simpleMessage(
+      "このプラットフォームでは HWID の紐付けはサポートされていません。",
+    ),
     "icon": MessageLookupByLibrary.simpleMessage("アイコン"),
     "iconRecords": MessageLookupByLibrary.simpleMessage("アイコン履歴"),
     "iconSets": MessageLookupByLibrary.simpleMessage("アイコンセット"),
@@ -1389,6 +1395,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "振り分け戦略を選択してください",
     ),
     "selected": MessageLookupByLibrary.simpleMessage("選択済み"),
+    "sendDeviceDataDesc": MessageLookupByLibrary.simpleMessage(
+      "デバイス識別子とモデルをプロキシプロバイダーのサーバーへ送信します。",
+    ),
+    "sendDeviceDataTitle": MessageLookupByLibrary.simpleMessage("HWID を送信"),
     "server": MessageLookupByLibrary.simpleMessage("サーバー"),
     "serviceAbnormalCount": m73,
     "serviceAllAvailable": MessageLookupByLibrary.simpleMessage("すべて利用可能"),
@@ -1494,6 +1504,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "submit": MessageLookupByLibrary.simpleMessage("送信"),
     "subscriptionInfo": MessageLookupByLibrary.simpleMessage("サブスクリプション情報"),
     "sudoPasswordTitle": MessageLookupByLibrary.simpleMessage("sudo のパスワードを入力"),
+    "support": MessageLookupByLibrary.simpleMessage("サポート"),
     "suspended": MessageLookupByLibrary.simpleMessage("一時停止中…"),
     "switchProfile": MessageLookupByLibrary.simpleMessage("プロファイルを切り替え"),
     "sync": MessageLookupByLibrary.simpleMessage("同期"),

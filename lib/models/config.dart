@@ -248,6 +248,7 @@ abstract class AppSettingProps with _$AppSettingProps {
     @Default(RestoreStrategy.compatible) RestoreStrategy restoreStrategy,
     @Default(true) bool showTrayTitle,
     @Default(true) bool checkCertificate,
+    @Default(true) bool sendDeviceHeaders,
     @Default(defaultUserAgents)
     @JsonKey(readValue: _readUserAgents)
     List<String> userAgents,
