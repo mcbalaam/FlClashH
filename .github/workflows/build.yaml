@@ -323,8 +323,10 @@ jobs:
         run: cargo test --manifest-path services/helper/Cargo.toml --features windows-service
 
   build:
-    # Releases publish where the release links point: the public repository.
-    if: github.repository == 'chen08209/FlClash' && github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    # Any repository that pushes a release tag builds its own artifacts; the
+    # publishing steps below stay upstream-only, so a fork never pushes to the
+    # upstream Homebrew tap, F-Droid repo or Telegram channel.
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -368,7 +370,7 @@ jobs:
           submodules: recursive
 
       - name: Setup Android Signing
-        if: startsWith(matrix.platform,'android')
+        if: startsWith(matrix.platform,'android') && github.repository == 'chen08209/FlClash'
         run: |
           echo "${{ secrets.KEYSTORE }}" | base64 --decode > android/app/keystore.jks
           {
@@ -459,8 +461,8 @@ jobs:
       telegram-bot-api:
         image: aiogram/telegram-bot-api:latest
         env:
-          TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID }}
-          TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH }}
+          TELEGRAM_API_ID: ${{ secrets.TELEGRAM_API_ID || 1 }}
+          TELEGRAM_API_HASH: ${{ secrets.TELEGRAM_API_HASH || 1 }}
         ports:
           - 8081:8081
     steps:
@@ -506,6 +508,7 @@ jobs:
           dart run tool/changelog.dart render telegram "${target[@]}" --out telegram.md
 
       - name: Push to telegram
+        if: github.repository == 'chen08209/FlClash'
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TAG: ${{ github.ref_name }}
@@ -527,14 +530,15 @@ jobs:
           sha256sum ./* > SHA256SUMS
 
       - name: Release
-        if: ${{ env.IS_STABLE == 'true' }}
+        if: ${{ env.IS_STABLE == 'true' || github.repository != 'chen08209/FlClash' }}
         uses: softprops/action-gh-release@v2
         with:
           files: ./dist/*
           body_path: './release.md'
+          prerelease: ${{ env.IS_STABLE != 'true' }}
 
       - name: Create Homebrew Cask Source Dir
-        if: ${{ env.IS_STABLE == 'true' }}
+        if: ${{ github.repository == 'chen08209/FlClash' && env.IS_STABLE == 'true' }}
         run: |
           version=$(echo "${{ github.ref_name }}" | sed 's/^v//')
           arm_sha=$(sha256sum "./dist/FlClash-${version}-macos-arm64.dmg" | awk '{print $1}')
@@ -548,7 +552,7 @@ jobs:
             ./.github/homebrew_cask_template.rb > ./brew/Casks/flclash.rb
 
       - name: Push to Homebrew tap
-        if: ${{ env.IS_STABLE == 'true' }}
+        if: ${{ github.repository == 'chen08209/FlClash' && env.IS_STABLE == 'true' }}
         uses: cpina/github-action-push-to-another-repository@v1.7.2
         env:
           SSH_DEPLOY_KEY: ${{ secrets.HOMEBREW_SSH_DEPLOY_KEY }}
@@ -563,14 +567,14 @@ jobs:
           target-directory: /
 
       - name: Create Fdroid Source Dir
-        if: ${{ env.IS_STABLE == 'true' }}
+        if: ${{ github.repository == 'chen08209/FlClash' && env.IS_STABLE == 'true' }}
         run: |
           mkdir -p ./tmp
           cp ./dist/*android-arm64-v8a* ./tmp/ || true
           echo "Files copied successfully"
 
       - name: Push to fdroid repo
-        if: ${{ env.IS_STABLE == 'true' }}
+        if: ${{ github.repository == 'chen08209/FlClash' && env.IS_STABLE == 'true' }}
         uses: cpina/github-action-push-to-another-repository@v1.7.2
         env:
           SSH_DEPLOY_KEY: ${{ secrets.SSH_DEPLOY_KEY }}
