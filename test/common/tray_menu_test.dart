@@ -10,7 +10,7 @@ import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/action.dart';
-import 'package:fl_clash/providers/state.dart';
+import 'package:fl_clash/providers/config.dart';
 import 'package:fl_clash/state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
@@ -169,13 +169,14 @@ void main() {
 
     final labels = _labels(showCall());
     final l10n = currentAppLocalizations;
-    expect(labels, contains(l10n.show));
+    expect(labels, contains(l10n.disconnected));
     expect(labels, contains(l10n.start));
-    expect(labels, contains(l10n.autoLaunch));
-    expect(labels, contains(l10n.copyEnvVar));
+    expect(labels, contains(l10n.show));
     expect(labels, contains(l10n.exit));
     expect(labels, isNot(contains(l10n.tun)));
     expect(labels, isNot(contains(l10n.systemProxy)));
+    expect(labels, isNot(contains(l10n.autoLaunch)));
+    expect(labels, isNot(contains(l10n.copyEnvVar)));
   });
 
   test('adds TUN and system proxy toggles once the core is running', () async {
@@ -194,10 +195,10 @@ void main() {
 
       final labels = _labels(showCall());
       final l10n = currentAppLocalizations;
+      expect(labels, contains(l10n.connected));
       expect(labels, contains(l10n.stop));
       expect(labels, contains(l10n.tun));
       expect(labels, contains(l10n.systemProxy));
-      expect(labels, contains(l10n.copyEnvVar));
     });
 
     test('names the mode in the tooltip and ships the safe icon', () async {
@@ -263,28 +264,20 @@ void main() {
     expect(first.first, 1024);
   });
 
-  test('group submenus carry their proxies as nested items', () async {
-    await update(
-      _trayState(
-        groups: [
-          const Group(
-            name: 'Proxy',
-            type: GroupType.Selector,
-            all: [Proxy(name: 'A', type: 'Direct')],
-          ),
-        ],
-      ),
-    );
+  test('omits proxy groups and the delay test entry', () async {
+    await update(_trayState(groups: [_proxyGroup]));
 
-    final submenu = _items(
-      showCall(),
-    ).firstWhere((item) => item['type'] == 'submenu');
-    expect(submenu['label'], 'Proxy');
-    final children = (submenu['items'] as List).cast<Map<Object?, Object?>>();
-    expect(children.map((item) => item['label']), contains('A'));
+    final items = _items(showCall());
+    expect(items.where((item) => item['type'] == 'submenu'), isEmpty);
+    expect(_labels(showCall()), isNot(contains(_proxyGroup.name)));
+    expect(_labels(showCall()), isNot(contains(HotAction.delayTest.label)));
   });
 
   test('shows each bound hotkey dimmed beside its entry', () async {
+    container.listen(appSettingProvider, (_, _) {});
+    container.read(appSettingProvider.notifier).value = const AppSettingProps(
+      showTrayHotkeyHints: true,
+    );
     await update(
       _trayState(
         isStart: true,
@@ -306,61 +299,6 @@ void main() {
     expect(_item(call, l10n.tun)['detail'], '⌃⇧T');
     expect(_item(call, l10n.exit), isNot(contains('detail')));
     expect(_item(call, Mode.rule.label), isNot(contains('detail')));
-  });
-
-  test(
-    'group submenus show the delay of the selection and of each proxy',
-    () async {
-      container.dispose();
-      container = ProviderContainer(
-        overrides: [
-          selectedProxyNameProvider('Proxy').overrideWithValue('A'),
-          trayDelaysProvider.overrideWithValue({
-            'Proxy': {'A': 120, 'B': -1, 'C': -2},
-          }),
-        ],
-      );
-      const group = Group(
-        name: 'Proxy',
-        type: GroupType.Selector,
-        all: [
-          Proxy(name: 'A', type: 'Direct'),
-          Proxy(name: 'B', type: 'Direct'),
-          Proxy(name: 'C', type: 'Direct'),
-          Proxy(name: 'D', type: 'Direct'),
-        ],
-      );
-      await update(_trayState(groups: [group]));
-
-      final submenu = _item(showCall(), 'Proxy');
-      expect(submenu['detail'], '120');
-      final children = (submenu['items'] as List).cast<Map<Object?, Object?>>();
-      expect(children.map((item) => item['detail']), [
-        '120',
-        currentAppLocalizations.timeout,
-        currentAppLocalizations.delayFailed,
-        null,
-      ]);
-    },
-  );
-
-  test('a delay test entry follows the groups', () async {
-    await update(
-      _trayState(
-        groups: [_proxyGroup],
-        hotKeys: {
-          HotAction.delayTest: _bind(
-            HotAction.delayTest,
-            PhysicalKeyboardKey.keyD,
-          ),
-        },
-      ),
-    );
-
-    final items = _items(showCall());
-    final index = items.indexWhere((item) => item['type'] == 'submenu');
-    expect(items[index + 1]['label'], HotAction.delayTest.label);
-    expect(items[index + 1]['detail'], '⌃⇧D');
   });
 
   group('a platform that is not macOS', () {
@@ -399,6 +337,10 @@ void main() {
     });
 
     test('joins modifiers with + in the hotkey hints', () async {
+      container.listen(appSettingProvider, (_, _) {});
+      container.read(appSettingProvider.notifier).value = const AppSettingProps(
+        showTrayHotkeyHints: true,
+      );
       await update(
         _trayState(
           hotKeys: {
