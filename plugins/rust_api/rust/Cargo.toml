@@ -22,6 +22,11 @@ global-hotkey = "0.8"
 [target.'cfg(all(unix, not(target_os = "android")))'.dependencies]
 libc = "0.2"
 
+# The desktop tray is a StatusNotifierItem; ksni speaks it in process, without
+# libayatana-appindicator, so a left click reaches `activate`.
+[target.'cfg(target_os = "linux")'.dependencies]
+ksni = { version = "0.3", features = ["blocking"] }
+
 # rquickjs ships pre-generated bindings for every target this project builds
 # except the Android ones, which have to be generated during the build.
 [target.'cfg(target_os = "android")'.dependencies]

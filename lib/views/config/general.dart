@@ -268,6 +268,11 @@ class GeneralView extends ConsumerWidget {
           select: (state) => state.silentLaunch,
           update: (state, value) => state.copyWith(silentLaunch: value),
         ),
+        _appSettingToggle(
+          title: (l) => l.showTrayHotkeyHints,
+          select: (state) => state.showTrayHotkeyHints,
+          update: (state, value) => state.copyWith(showTrayHotkeyHints: value),
+        ),
       ],
       _appSettingToggle(
         title: (l) => l.autoRun,
@@ -443,6 +448,7 @@ class GeneralView extends ConsumerWidget {
             items: _startupItems(appLocalizations),
             footer: [
               if (system.isDesktop) appLocalizations.silentLaunchDesc,
+              if (system.isDesktop) appLocalizations.showTrayHotkeyHintsDesc,
               appLocalizations.autoRunDesc,
               appLocalizations.onDemandDesc,
             ].join('\n'),

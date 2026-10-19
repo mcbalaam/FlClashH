@@ -9,6 +9,9 @@
 #include <libappindicator/app-indicator.h>
 #endif
 
+#include <cairo.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
+
 #include <cstring>
 
 #define TRAY_PLUGIN(obj) \
@@ -19,6 +22,9 @@ struct _TrayPlugin {
   FlMethodChannel* channel;
   AppIndicator* indicator;
   GtkWidget* menu;
+  GHashTable* item_widgets;
+  char* structure;
+  char* icon_path;
 };
 
 G_DEFINE_TYPE(TrayPlugin, tray_plugin, g_object_get_type())
@@ -60,8 +66,94 @@ static void on_menu_item_activate(GtkMenuItem* item, gpointer user_data) {
                                   arguments, nullptr, nullptr, nullptr);
 }
 
-static GtkWidget* build_menu(FlValue* items) {
+// A 12 px disc in the tunnel colour, drawn with cairo: the same shape the
+// menu bar apps use for their connection state.
+static GdkPixbuf* make_dot_pixbuf(bool connected) {
+  const int size = 12;
+  cairo_surface_t* surface =
+      cairo_image_surface_create(CAIRO_FORMAT_ARGB32, size, size);
+  cairo_t* cr = cairo_create(surface);
+  if (connected) {
+    cairo_set_source_rgb(cr, 0.13, 0.77, 0.37);
+  } else {
+    cairo_set_source_rgb(cr, 0.61, 0.64, 0.69);
+  }
+  cairo_arc(cr, size / 2.0, size / 2.0, size / 2.0 - 1.0, 0, 2 * G_PI);
+  cairo_fill(cr);
+  cairo_destroy(cr);
+  GdkPixbuf* pixbuf = gdk_pixbuf_get_from_surface(surface, 0, 0, size, size);
+  cairo_surface_destroy(surface);
+  return pixbuf;
+}
+
+// Everything that decides the menu's shape. Toggle state is left out on
+// purpose: a click that only flips a checkbox or radio must not replace the
+// menu, or the shell closes the popup and can re-deliver the click.
+static void append_structure(GString* out, FlValue* items) {
+  if (items == nullptr || fl_value_get_type(items) != FL_VALUE_TYPE_LIST) {
+    return;
+  }
+  for (size_t i = 0; i < fl_value_get_length(items); i++) {
+    FlValue* entry = fl_value_get_list_value(items, i);
+    if (fl_value_get_type(entry) != FL_VALUE_TYPE_MAP) {
+      continue;
+    }
+    const char* type = string_value(entry, "type");
+    const char* label = string_value(entry, "label");
+    const char* detail = string_value(entry, "detail");
+    g_string_append_printf(out, "%s|%s|%s|%d;", type == nullptr ? "" : type,
+                           label == nullptr ? "" : label,
+                           detail == nullptr ? "" : detail,
+                           bool_value(entry, "enabled", true) ? 1 : 0);
+    if (type != nullptr && strcmp(type, "submenu") == 0) {
+      g_string_append_c(out, '[');
+      append_structure(out, fl_value_lookup_string(entry, "items"));
+      g_string_append_c(out, ']');
+    }
+  }
+}
+
+static void update_states(TrayPlugin* self, FlValue* items) {
+  if (items == nullptr || fl_value_get_type(items) != FL_VALUE_TYPE_LIST) {
+    return;
+  }
+  for (size_t i = 0; i < fl_value_get_length(items); i++) {
+    FlValue* entry = fl_value_get_list_value(items, i);
+    if (fl_value_get_type(entry) != FL_VALUE_TYPE_MAP) {
+      continue;
+    }
+    const char* type = string_value(entry, "type");
+    FlValue* id = fl_value_lookup_string(entry, "id");
+    if (type == nullptr || id == nullptr ||
+        fl_value_get_type(id) != FL_VALUE_TYPE_INT) {
+      continue;
+    }
+    GtkWidget* item = GTK_WIDGET(g_hash_table_lookup(
+        self->item_widgets, GINT_TO_POINTER(fl_value_get_int(id))));
+    if (item == nullptr) {
+      continue;
+    }
+    if (strcmp(type, "checkbox") == 0 || strcmp(type, "radio") == 0) {
+      gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),
+                                     bool_value(entry, "checked", false));
+    } else if (strcmp(type, "status") == 0) {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+      GdkPixbuf* dot = make_dot_pixbuf(bool_value(entry, "connected", false));
+      if (dot != nullptr) {
+        gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
+                                      gtk_image_new_from_pixbuf(dot));
+        g_object_unref(dot);
+      }
+      G_GNUC_END_IGNORE_DEPRECATIONS
+      continue;
+    }
+    gtk_widget_set_sensitive(item, bool_value(entry, "enabled", true));
+  }
+}
+
+static GtkWidget* build_menu(FlValue* items, GHashTable* sink) {
   GtkWidget* menu = gtk_menu_new();
+  GSList* radio_group = nullptr;
   if (items == nullptr || fl_value_get_type(items) != FL_VALUE_TYPE_LIST) {
     return menu;
   }
@@ -78,6 +170,7 @@ static GtkWidget* build_menu(FlValue* items) {
     }
 
     if (strcmp(type, "separator") == 0) {
+      radio_group = nullptr;
       gtk_menu_shell_append(GTK_MENU_SHELL(menu),
                             gtk_separator_menu_item_new());
       continue;
@@ -97,11 +190,29 @@ static GtkWidget* build_menu(FlValue* items) {
       item = gtk_check_menu_item_new_with_label(label);
       gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),
                                      bool_value(entry, "checked", false));
+    } else if (strcmp(type, "radio") == 0) {
+      item = gtk_radio_menu_item_new_with_label(radio_group, label);
+      radio_group = gtk_radio_menu_item_get_group(GTK_RADIO_MENU_ITEM(item));
+      gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(item),
+                                     bool_value(entry, "checked", false));
+    } else if (strcmp(type, "status") == 0) {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+      item = gtk_image_menu_item_new_with_label(label);
+      GdkPixbuf* dot = make_dot_pixbuf(bool_value(entry, "connected", false));
+      if (dot != nullptr) {
+        gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(item),
+                                      gtk_image_new_from_pixbuf(dot));
+        g_object_unref(dot);
+      }
+      G_GNUC_END_IGNORE_DEPRECATIONS
+      gtk_widget_set_sensitive(item, FALSE);
+      dispatches = false;
     } else if (strcmp(type, "submenu") == 0) {
       item = gtk_menu_item_new_with_label(label);
       gtk_menu_item_set_submenu(GTK_MENU_ITEM(item),
                                 build_menu(fl_value_lookup_string(entry,
-                                                                  "items")));
+                                                                  "items"),
+                                           sink));
       dispatches = false;
     } else {
       item = gtk_menu_item_new_with_label(label);
@@ -120,6 +231,13 @@ static GtkWidget* build_menu(FlValue* items) {
       }
     }
 
+    FlValue* item_id = fl_value_lookup_string(entry, "id");
+    if (sink != nullptr && item_id != nullptr &&
+        fl_value_get_type(item_id) == FL_VALUE_TYPE_INT) {
+      g_hash_table_insert(sink, GINT_TO_POINTER(fl_value_get_int(item_id)),
+                          item);
+    }
+
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
   }
   return menu;
@@ -128,7 +246,8 @@ static GtkWidget* build_menu(FlValue* items) {
 static void attach_menu(TrayPlugin* self, FlValue* items) {
   GtkWidget* previous = self->menu;
 
-  GtkWidget* menu = build_menu(items);
+  g_hash_table_remove_all(self->item_widgets);
+  GtkWidget* menu = build_menu(items, self->item_widgets);
   g_object_ref_sink(menu);
   self->menu = menu;
 
@@ -161,6 +280,9 @@ static void release_tray(TrayPlugin* self) {
     gtk_widget_destroy(menu);
     g_object_unref(menu);
   }
+  g_hash_table_remove_all(self->item_widgets);
+  g_clear_pointer(&self->structure, g_free);
+  g_clear_pointer(&self->icon_path, g_free);
 }
 
 static FlMethodResponse* handle_show(TrayPlugin* self, FlValue* args) {
@@ -174,17 +296,37 @@ static FlMethodResponse* handle_show(TrayPlugin* self, FlValue* args) {
 
   const bool is_new = self->indicator == nullptr;
   if (is_new) {
+    G_GNUC_BEGIN_IGNORE_DEPRECATIONS
     self->indicator =
         app_indicator_new(id, icon_path, APP_INDICATOR_CATEGORY_APPLICATION_STATUS);
+    G_GNUC_END_IGNORE_DEPRECATIONS
   }
 
-  attach_menu(self, fl_value_lookup_string(args, "menu"));
-
-  if (!is_new) {
-    app_indicator_set_status(self->indicator, APP_INDICATOR_STATUS_PASSIVE);
+  FlValue* items = fl_value_lookup_string(args, "menu");
+  GString* structure = g_string_new(nullptr);
+  append_structure(structure, items);
+  const bool same_structure = self->menu != nullptr &&
+      self->structure != nullptr &&
+      g_strcmp0(self->structure, structure->str) == 0;
+  if (same_structure) {
+    update_states(self, items);
+  } else {
+    attach_menu(self, items);
+    g_free(self->structure);
+    self->structure = g_strdup(structure->str);
   }
+  g_string_free(structure, TRUE);
 
-  app_indicator_set_icon_full(self->indicator, icon_path, "");
+  const bool icon_changed =
+      self->icon_path == nullptr || g_strcmp0(self->icon_path, icon_path) != 0;
+  if (icon_changed) {
+    if (!is_new) {
+      app_indicator_set_status(self->indicator, APP_INDICATOR_STATUS_PASSIVE);
+    }
+    app_indicator_set_icon_full(self->indicator, icon_path, "");
+    g_free(self->icon_path);
+    self->icon_path = g_strdup(icon_path);
+  }
 
   const char* tool_tip = string_value(args, "toolTip");
   if (tool_tip != nullptr) {
@@ -193,7 +335,9 @@ static FlMethodResponse* handle_show(TrayPlugin* self, FlValue* args) {
 
   apply_title(self, string_value(args, "title"));
 
-  app_indicator_set_status(self->indicator, APP_INDICATOR_STATUS_ACTIVE);
+  if (icon_changed) {
+    app_indicator_set_status(self->indicator, APP_INDICATOR_STATUS_ACTIVE);
+  }
 
   return respond(true);
 }
@@ -236,6 +380,7 @@ static void tray_plugin_dispose(GObject* object) {
 
   release_tray(self);
   g_clear_object(&self->channel);
+  g_clear_pointer(&self->item_widgets, g_hash_table_unref);
 
   if (active_plugin == self) {
     active_plugin = nullptr;
@@ -252,6 +397,9 @@ static void tray_plugin_init(TrayPlugin* self) {
   self->channel = nullptr;
   self->indicator = nullptr;
   self->menu = nullptr;
+  self->item_widgets = g_hash_table_new(g_direct_hash, g_direct_equal);
+  self->structure = nullptr;
+  self->icon_path = nullptr;
 }
 
 static void method_call_cb(FlMethodChannel* channel,

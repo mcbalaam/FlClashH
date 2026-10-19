@@ -1739,6 +1739,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Кнопка остановки в уведомлении",
     ),
     "showPassword": MessageLookupByLibrary.simpleMessage("Показать пароль"),
+    "showTrayHotkeyHints": MessageLookupByLibrary.simpleMessage(
+      "Показывать хоткеи в трее",
+    ),
+    "showTrayHotkeyHintsDesc": MessageLookupByLibrary.simpleMessage(
+      "Показывать глобальный хоткей рядом с пунктом меню трея.",
+    ),
     "sidebarBlur": MessageLookupByLibrary.simpleMessage(
       "Размытие боковой панели",
     ),

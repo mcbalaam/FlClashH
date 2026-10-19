@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:fl_clash/common/app_localizations.dart';
+import 'package:fl_clash/common/tray.dart';
 import 'package:fl_clash/l10n/l10n.dart';
 import 'package:fl_clash/manager/locale_manager.dart';
 import 'package:fl_clash/manager/tray_manager.dart';
@@ -55,12 +56,15 @@ void main() {
 
   late ProviderContainer container;
   late List<String> windowCalls;
+  late TrayTransport originalTransport;
 
   setUpAll(() async {
     await AppLocalizations.load(const Locale('en'));
   });
 
   setUp(() {
+    originalTransport = trayTransport;
+    trayTransport = const PluginTrayTransport();
     _RecordingSystemAction.updateTrayCount = 0;
     _RecordingSystemAction.updateTrayLocales.clear();
     windowCalls = <String>[];
@@ -75,6 +79,7 @@ void main() {
   });
 
   tearDown(() {
+    trayTransport = originalTransport;
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
       ..setMockMethodCallHandler(_trayChannel, null)
       ..setMockMethodCallHandler(_windowChannel, null);

@@ -7836,6 +7836,26 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `Show hotkey hints in the tray`
+  String get showTrayHotkeyHints {
+    return Intl.message(
+      'Show hotkey hints in the tray',
+      name: 'showTrayHotkeyHints',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show each tray item's global hotkey next to it.`
+  String get showTrayHotkeyHintsDesc {
+    return Intl.message(
+      'Show each tray item\'s global hotkey next to it.',
+      name: 'showTrayHotkeyHintsDesc',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

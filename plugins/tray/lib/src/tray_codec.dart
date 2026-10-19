@@ -76,6 +76,26 @@ abstract final class TrayCodec {
             'enabled': enabled,
             'checked': checked,
           },
+        TrayMenuRadio(
+          :final label,
+          :final detail,
+          :final enabled,
+          :final checked,
+        ) =>
+          <String, Object?>{
+            'id': id,
+            'type': 'radio',
+            'label': label,
+            if (detail != null && detail.isNotEmpty) 'detail': detail,
+            'enabled': enabled,
+            'checked': checked,
+          },
+        TrayMenuStatus(:final label, :final connected) => <String, Object?>{
+          'id': id,
+          'type': 'status',
+          'label': label,
+          'connected': connected,
+        },
         TrayMenuSubmenu(
           :final label,
           :final detail,

@@ -1787,6 +1787,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Botón de detener en la notificación",
     ),
     "showPassword": MessageLookupByLibrary.simpleMessage("Mostrar contraseña"),
+    "showTrayHotkeyHints": MessageLookupByLibrary.simpleMessage(
+      "Mostrar atajos en la bandeja",
+    ),
+    "showTrayHotkeyHintsDesc": MessageLookupByLibrary.simpleMessage(
+      "Mostrar el atajo global junto a cada elemento de la bandeja.",
+    ),
     "sidebarBlur": MessageLookupByLibrary.simpleMessage(
       "Desenfoque de la barra lateral",
     ),

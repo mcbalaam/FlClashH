@@ -1790,6 +1790,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "showPassword": MessageLookupByLibrary.simpleMessage(
       "Afficher le mot de passe",
     ),
+    "showTrayHotkeyHints": MessageLookupByLibrary.simpleMessage(
+      "Afficher les raccourcis dans la barre",
+    ),
+    "showTrayHotkeyHintsDesc": MessageLookupByLibrary.simpleMessage(
+      "Afficher le raccourci global à côté de chaque élément de la barre.",
+    ),
     "sidebarBlur": MessageLookupByLibrary.simpleMessage(
       "Flou de la barre latérale",
     ),

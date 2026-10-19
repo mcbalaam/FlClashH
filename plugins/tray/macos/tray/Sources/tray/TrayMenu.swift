@@ -14,7 +14,7 @@ final class TrayMenu: NSMenu, NSMenuDelegate {
         for entry in items {
             let item = makeItem(entry)
             addItem(item)
-            contents.append(item.isSeparatorItem ? nil : TrayMenu.content(entry, item))
+            contents.append(TrayMenu.content(entry, item))
         }
     }
 
@@ -38,8 +38,17 @@ final class TrayMenu: NSMenu, NSMenuDelegate {
         let item = NSMenuItem()
         item.title = entry["label"] as? String ?? ""
         item.tag = entry["id"] as? Int ?? 0
+
+        if type == "status" {
+            item.isEnabled = false
+            item.image = TrayMenu.dotImage(connected: entry["connected"] as? Bool == true)
+            return item
+        }
+
         item.isEnabled = entry["enabled"] as? Bool ?? true
-        item.state = type == "checkbox" && entry["checked"] as? Bool == true ? .on : .off
+        item.state =
+            (type == "checkbox" || type == "radio") && entry["checked"] as? Bool == true
+            ? .on : .off
 
         if type == "submenu" {
             let children = entry["items"] as? [[String: Any]] ?? []
@@ -51,8 +60,25 @@ final class TrayMenu: NSMenu, NSMenuDelegate {
         return item
     }
 
-    private static func content(_ entry: [String: Any], _ item: NSMenuItem) -> TrayMenuItemView.Content {
-        TrayMenuItemView.Content(
+    private static func dotImage(connected: Bool) -> NSImage {
+        let size = NSSize(width: 12, height: 12)
+        let image = NSImage(size: size)
+        image.lockFocus()
+        (connected ? NSColor.systemGreen : NSColor.systemGray).setFill()
+        NSBezierPath(ovalIn: NSRect(origin: .zero, size: size)).fill()
+        image.unlockFocus()
+        return image
+    }
+
+    private static func content(
+        _ entry: [String: Any],
+        _ item: NSMenuItem
+    ) -> TrayMenuItemView.Content? {
+        let type = entry["type"] as? String ?? ""
+        if type == "separator" || type == "status" {
+            return nil
+        }
+        return TrayMenuItemView.Content(
             label: item.title,
             detail: detail(entry),
             checked: item.state == .on,

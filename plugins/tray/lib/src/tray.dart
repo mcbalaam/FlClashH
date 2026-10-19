@@ -165,6 +165,9 @@ final class Tray {
             onSelected?.call();
           case TrayMenuCheckbox(:final onSelected):
             onSelected?.call();
+          case TrayMenuRadio(:final onSelected):
+            onSelected?.call();
+          case TrayMenuStatus():
           case TrayMenuSubmenu():
           case TrayMenuSeparator():
             return;

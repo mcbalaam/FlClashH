@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:collection/collection.dart';
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/common/tray.dart';
 import 'package:fl_clash/common/window.dart';
@@ -29,7 +28,7 @@ class _TrayManagerState extends ConsumerState<TrayManager> {
   @override
   void initState() {
     super.initState();
-    _subscription = Tray.instance.events.listen(_handleTrayEvent);
+    _subscription = trayTransport.events.listen(_handleTrayEvent);
     ref.listenManual(trayStateProvider, (prev, next) {
       if (prev != next) {
         _requestUpdate();
@@ -41,11 +40,6 @@ class _TrayManagerState extends ConsumerState<TrayManager> {
       }
     });
     if (system.isMacOS) {
-      ref.listenManual(trayDelaysProvider, (prev, next) {
-        if (!const DeepCollectionEquality().equals(prev, next)) {
-          _requestUpdate();
-        }
-      });
       ref.listenManual(trayTitleStateProvider, (prev, next) {
         if (prev != next) {
           _reportFailure(
@@ -102,7 +96,7 @@ class _TrayManagerState extends ConsumerState<TrayManager> {
       case TrayIconActivated():
         window?.show();
       case TrayMenuRequested():
-        _reportFailure(Tray.instance.openMenu());
+        _reportFailure(trayTransport.openMenu());
       case TrayMenuItemSelected():
         break;
     }

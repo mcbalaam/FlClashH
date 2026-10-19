@@ -1289,6 +1289,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "通知栏显示停止按钮",
     ),
     "showPassword": MessageLookupByLibrary.simpleMessage("显示密码"),
+    "showTrayHotkeyHints": MessageLookupByLibrary.simpleMessage("在托盘中显示快捷键提示"),
+    "showTrayHotkeyHintsDesc": MessageLookupByLibrary.simpleMessage(
+      "在每个托盘菜单项旁显示其全局快捷键。",
+    ),
     "sidebarBlur": MessageLookupByLibrary.simpleMessage("侧边栏背景模糊"),
     "sidebarBlurDesc": MessageLookupByLibrary.simpleMessage("侧边栏透出窗口后方模糊的桌面"),
     "silentLaunch": MessageLookupByLibrary.simpleMessage("静默启动"),

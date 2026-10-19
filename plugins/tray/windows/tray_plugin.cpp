@@ -151,6 +151,11 @@ void TrayPlugin::RebuildMenu(HMENU menu, const flutter::EncodableList& items) {
 
     if (*type == "checkbox") {
       flags |= BoolAt(*entry, "checked", false) ? MF_CHECKED : MF_UNCHECKED;
+    } else if (*type == "radio") {
+      flags |= MF_RADIOCHECK;
+      flags |= BoolAt(*entry, "checked", false) ? MF_CHECKED : MF_UNCHECKED;
+    } else if (*type == "status") {
+      flags |= MF_GRAYED;
     } else if (*type == "submenu") {
       HMENU submenu = ::CreatePopupMenu();
       const flutter::EncodableList* children = ListAt(*entry, "items");

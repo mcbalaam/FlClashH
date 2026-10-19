@@ -1397,6 +1397,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "알림에 중지 버튼 표시",
     ),
     "showPassword": MessageLookupByLibrary.simpleMessage("비밀번호 표시"),
+    "showTrayHotkeyHints": MessageLookupByLibrary.simpleMessage(
+      "트레이에 단축키 힌트 표시",
+    ),
+    "showTrayHotkeyHintsDesc": MessageLookupByLibrary.simpleMessage(
+      "각 트레이 항목 옆에 전역 단축키를 표시합니다.",
+    ),
     "sidebarBlur": MessageLookupByLibrary.simpleMessage("사이드바 블러"),
     "sidebarBlurDesc": MessageLookupByLibrary.simpleMessage(
       "사이드바를 통해 창 뒤의 흐릿한 바탕화면을 표시합니다",

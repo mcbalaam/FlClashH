@@ -34,6 +34,34 @@ final class TrayMenuCheckbox extends TrayMenuItem {
   final TrayMenuItemSelectedCallback? onSelected;
 }
 
+/// One entry of a radio group: exactly one item of a consecutive run is
+/// [checked]. The platforms that have no radio menu item fall back to a
+/// checkmark group.
+final class TrayMenuRadio extends TrayMenuItem {
+  const TrayMenuRadio({
+    required this.label,
+    required this.checked,
+    this.detail,
+    this.enabled = true,
+    this.onSelected,
+  });
+
+  final String label;
+  final bool checked;
+  final String? detail;
+  final bool enabled;
+  final TrayMenuItemSelectedCallback? onSelected;
+}
+
+/// A non-interactive status row, drawn with a leading [connected]-coloured dot,
+/// as a menu bar app shows its tunnel state.
+final class TrayMenuStatus extends TrayMenuItem {
+  const TrayMenuStatus({required this.label, required this.connected});
+
+  final String label;
+  final bool connected;
+}
+
 final class TrayMenuSubmenu extends TrayMenuItem {
   const TrayMenuSubmenu({
     required this.label,

@@ -1426,6 +1426,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "通知に停止ボタンを表示",
     ),
     "showPassword": MessageLookupByLibrary.simpleMessage("パスワードを表示"),
+    "showTrayHotkeyHints": MessageLookupByLibrary.simpleMessage(
+      "トレイにホットキーのヒントを表示",
+    ),
+    "showTrayHotkeyHintsDesc": MessageLookupByLibrary.simpleMessage(
+      "各トレイ項目のグローバルホットキーを横に表示します。",
+    ),
     "sidebarBlur": MessageLookupByLibrary.simpleMessage("サイドバーのぼかし"),
     "sidebarBlurDesc": MessageLookupByLibrary.simpleMessage(
       "ウィンドウ背後のデスクトップをぼかしてサイドバーに透過します",

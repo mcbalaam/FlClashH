@@ -137,4 +137,40 @@ void main() {
 
     expect(encoded.menu.single, {'id': 1024, 'type': 'separator'});
   });
+
+  test('radio serializes with its checked state', () {
+    final encoded = TrayCodec.encode(
+      _spec(
+        menu: const [
+          TrayMenuRadio(label: 'rule', checked: true, detail: '⌃R'),
+          TrayMenuRadio(label: 'global', checked: false),
+        ],
+      ),
+    );
+
+    final items = encoded.menu.cast<Map<String, Object?>>();
+    expect(items[0], {
+      'id': 1024,
+      'type': 'radio',
+      'label': 'rule',
+      'detail': '⌃R',
+      'enabled': true,
+      'checked': true,
+    });
+    expect(items[1]['type'], 'radio');
+    expect(items[1]['checked'], isFalse);
+  });
+
+  test('status serializes with its connection state', () {
+    final encoded = TrayCodec.encode(
+      _spec(menu: const [TrayMenuStatus(label: 'Connected', connected: true)]),
+    );
+
+    expect(encoded.menu.single, {
+      'id': 1024,
+      'type': 'status',
+      'label': 'Connected',
+      'connected': true,
+    });
+  });
 }
