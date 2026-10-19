@@ -87,6 +87,7 @@ void main() {
   late List<MethodCall> calls;
   late ProviderContainer container;
   late AppTray tray;
+  late TrayTransport originalTransport;
 
   late Directory root;
 
@@ -111,6 +112,8 @@ void main() {
 
   setUp(() {
     debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+    originalTransport = trayTransport;
+    trayTransport = const PluginTrayTransport();
     calls = [];
     tray = AppTray.forPlatform(isMacOS: true, isWindows: false);
     container = ProviderContainer();
@@ -123,6 +126,7 @@ void main() {
   });
 
   tearDown(() {
+    trayTransport = originalTransport;
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(_channel, null);
     container.dispose();

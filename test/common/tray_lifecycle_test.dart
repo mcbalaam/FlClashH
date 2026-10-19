@@ -31,6 +31,7 @@ void main() {
 
   late List<MethodCall> calls;
   late ProviderContainer container;
+  late TrayTransport originalTransport;
 
   setUpAll(() async {
     await AppLocalizations.load(const Locale('en'));
@@ -38,6 +39,8 @@ void main() {
 
   setUp(() {
     debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+    originalTransport = trayTransport;
+    trayTransport = const PluginTrayTransport();
     calls = [];
     container = ProviderContainer();
     Tray.instance.resetForTesting();
@@ -49,6 +52,7 @@ void main() {
   });
 
   tearDown(() {
+    trayTransport = originalTransport;
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(_channel, null);
     container.dispose();
