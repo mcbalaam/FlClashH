@@ -1,0 +1,47 @@
+display_name: FlClash
+package_name: flclash
+maintainer:
+  name: chen08209
+  email: chen08209@gmail.com
+
+installed_size: 161928591
+licenses:
+  - GPL-3.0-only
+
+icon: ./assets/images/icon.png
+
+dependencies:
+  - gtk3
+  - libayatana-appindicator
+  - libsecret
+
+postinstall_scripts:
+  - 'update-desktop-database /usr/share/applications >/dev/null 2>&1 || true'
+
+postupgrade_scripts:
+  - 'ln -sf /opt/FlClash/FlClash /usr/bin/FlClash'
+  - 'update-desktop-database /usr/share/applications >/dev/null 2>&1 || true'
+
+# The Helper unit is written on demand by the app, not at package install.
+postuninstall_scripts:
+  - 'systemctl disable --now flclash-helper.service >/dev/null 2>&1 || true'
+  - 'rm -f /etc/systemd/system/flclash-helper.service'
+  - 'systemctl daemon-reload >/dev/null 2>&1 || true'
+
+supported_mime_type:
+  - x-scheme-handler/clash
+  - x-scheme-handler/clashmeta
+  - x-scheme-handler/flclash
+
+keywords:
+  - FlClash
+  - Clash
+  - ClashMeta
+  - Proxy
+
+generic_name: FlClash
+
+categories:
+  - Network
+
+startup_notify: true

@@ -7,7 +7,7 @@ import 'package:yaml/yaml.dart';
 
 const _allTargets = <String, String>{
   'android': 'apk',
-  'linux': 'deb,appimage,rpm',
+  'linux': 'deb,appimage,rpm,pacman',
   'macos': 'dmg',
   'windows': 'exe,zip',
 };
@@ -221,7 +221,40 @@ Future<int> _package(
     stderr.write(utf8.decode(data));
   });
   final exitCode = await process.exitCode;
+  if (exitCode != 0) return exitCode;
+  if (platform == 'linux' &&
+      targets.split(',').map((target) => target.trim()).contains('pacman')) {
+    return _fixPacmanPackages(rootDir);
+  }
   return exitCode;
+}
+
+Future<int> _fixPacmanPackages(String rootDir) async {
+  final dist = Directory(p.join(rootDir, 'dist'));
+  if (!dist.existsSync()) return 0;
+  final packages =
+      dist
+          .listSync()
+          .whereType<File>()
+          .where((file) => file.path.endsWith('.pacman'))
+          .toList()
+        ..sort((a, b) => a.path.compareTo(b.path));
+  for (final package in packages) {
+    final output =
+        '${package.path.substring(0, package.path.length - '.pacman'.length)}'
+        '.pkg.tar.xz';
+    final result = await Process.run('bash', [
+      p.join(rootDir, 'tool', 'fix_pacman_package.sh'),
+      package.path,
+      output,
+    ]);
+    if (result.exitCode != 0) {
+      stderr.write(result.stderr);
+      return result.exitCode;
+    }
+    package.deleteSync();
+  }
+  return 0;
 }
 
 String _detectArch() {
@@ -275,6 +308,7 @@ Future<int> _ensureLinuxDependencies() async {
     ['locate'],
     ['rpm', 'patchelf'],
     ['libfuse2'],
+    ['libarchive-tools', 'xz-utils', 'fakeroot'],
   ];
 
   final missingGroups = <List<String>>[];
