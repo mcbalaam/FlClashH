@@ -12,6 +12,7 @@ const _platformPackages = [
 
 const _platformModules = [
   'lib/common/tray.dart',
+  'lib/common/tray_rust.dart',
   'lib/common/window.dart',
   'lib/common/launch.dart',
   'lib/common/system_dns.dart',
