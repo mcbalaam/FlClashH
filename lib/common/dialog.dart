@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
@@ -185,6 +186,63 @@ class Dialogs {
       return;
     }
     unawaited(launchUrl(Uri.parse(url)));
+  }
+
+  Future<void> showHwidNotSupported() async {
+    await showMessage(
+      title: 'HWID',
+      message: TextSpan(text: currentAppLocalizations.hwidNotSupported),
+      cancelable: false,
+    );
+  }
+
+  Future<void> showHwidMaxDevicesReached({
+    required String announce,
+    String? supportUrl,
+  }) async {
+    final text = _decodeAnnounce(announce);
+    if (text.isEmpty) {
+      return;
+    }
+    final hasSupport = supportUrl != null && supportUrl.isNotEmpty;
+    final openSupport = await showCommonDialog<bool>(
+      child: Builder(
+        builder: (context) {
+          final appLocalizations = context.appLocalizations;
+          return CommonDialog(
+            title: appLocalizations.hwidMaxDevicesReached,
+            actions: [
+              if (hasSupport)
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: Text(appLocalizations.support),
+                ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text(appLocalizations.confirm),
+              ),
+            ],
+            child: SelectableText(text),
+          );
+        },
+      ),
+    );
+    if (openSupport == true && supportUrl != null) {
+      await openUrl(supportUrl);
+    }
+  }
+}
+
+/// The panel may send the announce as base64, with or without the `base64:`
+/// prefix, and falls back to the raw text when it is neither.
+String _decodeAnnounce(String announce) {
+  final value = announce.startsWith('base64:')
+      ? announce.substring(7)
+      : announce;
+  try {
+    return utf8.decode(base64.decode(base64.normalize(value)));
+  } catch (_) {
+    return announce;
   }
 }
 

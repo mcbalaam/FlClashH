@@ -941,5 +941,10 @@
   "allReferencedProxies": "参照されているすべてのプロキシ",
   "allReferencedProxyProviders": "参照されているすべてのプロキシプロバイダー",
   "showTrayHotkeyHints": "トレイにホットキーのヒントを表示",
-  "showTrayHotkeyHintsDesc": "各トレイ項目のグローバルホットキーを横に表示します。"
+  "showTrayHotkeyHintsDesc": "各トレイ項目のグローバルホットキーを横に表示します。",
+  "hwidNotSupported": "このプラットフォームでは HWID の紐付けはサポートされていません。",
+  "hwidMaxDevicesReached": "デバイス数の上限に達しました",
+  "sendDeviceDataTitle": "HWID を送信",
+  "sendDeviceDataDesc": "デバイス識別子とモデルをプロキシプロバイダーのサーバーへ送信します。",
+  "support": "サポート"
 }

@@ -7856,6 +7856,51 @@ class AppLocalizations {
       args: [],
     );
   }
+
+  /// `HWID binding is not supported on this platform.`
+  String get hwidNotSupported {
+    return Intl.message(
+      'HWID binding is not supported on this platform.',
+      name: 'hwidNotSupported',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Device limit reached`
+  String get hwidMaxDevicesReached {
+    return Intl.message(
+      'Device limit reached',
+      name: 'hwidMaxDevicesReached',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send HWID`
+  String get sendDeviceDataTitle {
+    return Intl.message(
+      'Send HWID',
+      name: 'sendDeviceDataTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send the device identifier and model to the proxy provider server.`
+  String get sendDeviceDataDesc {
+    return Intl.message(
+      'Send the device identifier and model to the proxy provider server.',
+      name: 'sendDeviceDataDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Support`
+  String get support {
+    return Intl.message('Support', name: 'support', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

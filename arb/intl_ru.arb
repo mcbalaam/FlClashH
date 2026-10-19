@@ -941,5 +941,10 @@
   "allReferencedProxies": "Все используемые прокси",
   "allReferencedProxyProviders": "Все используемые провайдеры прокси",
   "showTrayHotkeyHints": "Показывать хоткеи в трее",
-  "showTrayHotkeyHintsDesc": "Показывать глобальный хоткей рядом с пунктом меню трея."
+  "showTrayHotkeyHintsDesc": "Показывать глобальный хоткей рядом с пунктом меню трея.",
+  "hwidNotSupported": "Привязка по HWID не поддерживается на этой платформе.",
+  "hwidMaxDevicesReached": "Достигнут лимит устройств",
+  "sendDeviceDataTitle": "Отправлять HWID",
+  "sendDeviceDataDesc": "Отправлять идентификатор и модель устройства на сервер прокси-провайдера.",
+  "support": "Поддержка"
 }

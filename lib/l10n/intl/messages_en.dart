@@ -893,6 +893,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "hoursAgo": m33,
     "hoursAgoShort": m34,
     "hue": MessageLookupByLibrary.simpleMessage("Hue"),
+    "hwidMaxDevicesReached": MessageLookupByLibrary.simpleMessage(
+      "Device limit reached",
+    ),
+    "hwidNotSupported": MessageLookupByLibrary.simpleMessage(
+      "HWID binding is not supported on this platform.",
+    ),
     "icon": MessageLookupByLibrary.simpleMessage("Icon"),
     "iconRecords": MessageLookupByLibrary.simpleMessage("Icon records"),
     "iconSets": MessageLookupByLibrary.simpleMessage("Icon sets"),
@@ -1615,6 +1621,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Please select a split strategy",
     ),
     "selected": MessageLookupByLibrary.simpleMessage("Selected"),
+    "sendDeviceDataDesc": MessageLookupByLibrary.simpleMessage(
+      "Send the device identifier and model to the proxy provider server.",
+    ),
+    "sendDeviceDataTitle": MessageLookupByLibrary.simpleMessage("Send HWID"),
     "server": MessageLookupByLibrary.simpleMessage("Server"),
     "serviceAbnormalCount": m73,
     "serviceAllAvailable": MessageLookupByLibrary.simpleMessage(
@@ -1748,6 +1758,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "sudoPasswordTitle": MessageLookupByLibrary.simpleMessage(
       "Enter your password for sudo",
     ),
+    "support": MessageLookupByLibrary.simpleMessage("Support"),
     "suspended": MessageLookupByLibrary.simpleMessage("Suspended…"),
     "switchProfile": MessageLookupByLibrary.simpleMessage("Switch profile"),
     "sync": MessageLookupByLibrary.simpleMessage("Sync"),

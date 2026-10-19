@@ -955,6 +955,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "hoursAgo": m33,
     "hoursAgoShort": m34,
     "hue": MessageLookupByLibrary.simpleMessage("Teinte"),
+    "hwidMaxDevicesReached": MessageLookupByLibrary.simpleMessage(
+      "Limite d\'appareils atteinte",
+    ),
+    "hwidNotSupported": MessageLookupByLibrary.simpleMessage(
+      "La liaison HWID n\'est pas prise en charge sur cette plateforme.",
+    ),
     "icon": MessageLookupByLibrary.simpleMessage("Icône"),
     "iconRecords": MessageLookupByLibrary.simpleMessage(
       "Historique des icônes",
@@ -1741,6 +1747,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Veuillez sélectionner une stratégie de répartition",
     ),
     "selected": MessageLookupByLibrary.simpleMessage("Sélectionné"),
+    "sendDeviceDataDesc": MessageLookupByLibrary.simpleMessage(
+      "Envoyer l\'identifiant et le modèle de l\'appareil au serveur du fournisseur proxy.",
+    ),
+    "sendDeviceDataTitle": MessageLookupByLibrary.simpleMessage(
+      "Envoyer le HWID",
+    ),
     "server": MessageLookupByLibrary.simpleMessage("Serveur"),
     "serviceAbnormalCount": m73,
     "serviceAllAvailable": MessageLookupByLibrary.simpleMessage(
@@ -1886,6 +1898,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "sudoPasswordTitle": MessageLookupByLibrary.simpleMessage(
       "Saisissez votre mot de passe pour sudo",
     ),
+    "support": MessageLookupByLibrary.simpleMessage("Assistance"),
     "suspended": MessageLookupByLibrary.simpleMessage("Suspendu…"),
     "switchProfile": MessageLookupByLibrary.simpleMessage("Changer de profil"),
     "sync": MessageLookupByLibrary.simpleMessage("Synchroniser"),

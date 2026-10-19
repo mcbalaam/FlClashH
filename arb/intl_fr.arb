@@ -941,5 +941,10 @@
   "allReferencedProxies": "Tous les proxys référencés",
   "allReferencedProxyProviders": "Tous les fournisseurs de proxys référencés",
   "showTrayHotkeyHints": "Afficher les raccourcis dans la barre",
-  "showTrayHotkeyHintsDesc": "Afficher le raccourci global à côté de chaque élément de la barre."
+  "showTrayHotkeyHintsDesc": "Afficher le raccourci global à côté de chaque élément de la barre.",
+  "hwidNotSupported": "La liaison HWID n'est pas prise en charge sur cette plateforme.",
+  "hwidMaxDevicesReached": "Limite d'appareils atteinte",
+  "sendDeviceDataTitle": "Envoyer le HWID",
+  "sendDeviceDataDesc": "Envoyer l'identifiant et le modèle de l'appareil au serveur du fournisseur proxy.",
+  "support": "Assistance"
 }

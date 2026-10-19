@@ -249,6 +249,7 @@ abstract class AppSettingProps with _$AppSettingProps {
     @Default(true) bool showTrayTitle,
     @Default(false) bool showTrayHotkeyHints,
     @Default(true) bool checkCertificate,
+    @Default(true) bool sendDeviceHeaders,
     @Default(defaultUserAgents)
     @JsonKey(readValue: _readUserAgents)
     List<String> userAgents,

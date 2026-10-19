@@ -13,6 +13,14 @@ part 'generated/profile.g.dart';
 typedef ValidateConfig =
     Future<String> Function(String path, String ageSecretKey);
 
+const _providerHeaderNames = [
+  'announce',
+  'support-url',
+  'profile-update-interval',
+  'x-hwid-max-devices-reached',
+  'x-hwid-not-supported',
+];
+
 @freezed
 abstract class SubscriptionInfo with _$SubscriptionInfo {
   const factory SubscriptionInfo({
@@ -82,6 +90,7 @@ abstract class Profile with _$Profile {
     @Default(ProfileOverrides())
     @JsonKey(fromJson: ProfileOverrides.safeFromJson)
     ProfileOverrides overrides,
+    @Default({}) Map<String, String> providerHeaders,
   }) = _Profile;
 
   factory Profile.fromJson(Map<String, Object?> json) =>
@@ -157,6 +166,7 @@ extension ProfileExtension on Profile {
 
   Future<Profile?> checkAndUpdateAndCopy({
     required ValidateConfig validate,
+    bool sendDeviceHeaders = true,
   }) async {
     if (type != ProfileType.url) {
       return null;
@@ -165,7 +175,7 @@ extension ProfileExtension on Profile {
     if (await mFile.exists()) {
       return null;
     }
-    return update(validate: validate);
+    return update(validate: validate, sendDeviceHeaders: sendDeviceHeaders);
   }
 
   Future<File> _getFile([bool autoCreate = true]) async {
@@ -182,16 +192,33 @@ extension ProfileExtension on Profile {
     return _getFile();
   }
 
-  Future<Profile> update({required ValidateConfig validate}) async {
-    final response = await request.getFileResponseForUrl(url);
+  Future<Profile> update({
+    required ValidateConfig validate,
+    bool sendDeviceHeaders = true,
+  }) async {
+    final headers = sendDeviceHeaders
+        ? await DeviceInfoService().getSubscriptionHeaders()
+        : const <String, String>{};
+    final response = await request.getFileResponseForUrl(
+      url,
+      headers: headers.isEmpty ? null : headers,
+    );
     final disposition = response.headers.value('content-disposition');
     final userinfo = response.headers.value('subscription-userinfo');
+    final providerHeaders = <String, String>{};
+    for (final name in _providerHeaderNames) {
+      final value = response.headers.value(name);
+      if (value != null && value.isNotEmpty) {
+        providerHeaders[name] = value;
+      }
+    }
     return copyWith(
       label: label.takeFirstValid([
         getFileNameForDisposition(disposition),
         defaultLabel,
       ]),
       subscriptionInfo: SubscriptionInfo.formHString(userinfo),
+      providerHeaders: providerHeaders,
     ).saveFile(
       decompressUnlabeled(response.data ?? Uint8List(0)),
       validate: validate,

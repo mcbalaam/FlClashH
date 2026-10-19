@@ -941,5 +941,10 @@
   "allReferencedProxies": "全部被引用的代理",
   "allReferencedProxyProviders": "全部被引用的代理集",
   "showTrayHotkeyHints": "在托盘中显示快捷键提示",
-  "showTrayHotkeyHintsDesc": "在每个托盘菜单项旁显示其全局快捷键。"
+  "showTrayHotkeyHintsDesc": "在每个托盘菜单项旁显示其全局快捷键。",
+  "hwidNotSupported": "此平台不支持 HWID 绑定。",
+  "hwidMaxDevicesReached": "已达到设备数量上限",
+  "sendDeviceDataTitle": "发送 HWID",
+  "sendDeviceDataDesc": "向代理服务端发送设备标识与设备型号。",
+  "support": "支持"
 }

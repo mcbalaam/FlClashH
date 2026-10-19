@@ -51,6 +51,7 @@ _AppSettingProps _$AppSettingPropsFromJson(
   showTrayTitle: json['showTrayTitle'] as bool? ?? true,
   showTrayHotkeyHints: json['showTrayHotkeyHints'] as bool? ?? false,
   checkCertificate: json['checkCertificate'] as bool? ?? true,
+  sendDeviceHeaders: json['sendDeviceHeaders'] as bool? ?? true,
   userAgents:
       (_readUserAgents(json, 'userAgents') as List<dynamic>?)
           ?.map((e) => e as String)
@@ -114,6 +115,7 @@ Map<String, dynamic> _$AppSettingPropsToJson(_AppSettingProps instance) =>
       'showTrayTitle': instance.showTrayTitle,
       'showTrayHotkeyHints': instance.showTrayHotkeyHints,
       'checkCertificate': instance.checkCertificate,
+      'sendDeviceHeaders': instance.sendDeviceHeaders,
       'userAgents': instance.userAgents,
       'filters': instance.filters,
       'hideIp': instance.hideIp,

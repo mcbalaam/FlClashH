@@ -124,6 +124,16 @@ app-wide DNS and `ProfileOverrideTarget` for a profile. Another overridable sect
 A config from a release that still had the `overrideDns` toggle keeps, through `Config.fromJson`, the normal keys of
 an on toggle and none of an off one. That release had no custom profiles, so its app-wide NTP override is dropped.
 
+## Subscription Device Headers
+
+`Profile.update` sends `x-hwid`, `x-device-os`, `x-ver-os` and `x-device-model` from
+`DeviceInfoService` unless `AppSettingProps.sendDeviceHeaders` is off, and stores the panel's `announce`,
+`support-url`, `profile-update-interval`, `x-hwid-max-devices-reached` and `x-hwid-not-supported` in
+`Profile.providerHeaders` for the update and add-by-link paths to surface. The HWID derivation is deliberately
+byte-identical to FlClashX — the same per-platform source, the same 16-hex SHA-256 truncation — so a device already
+bound in a Remnawave panel keeps its slot. Changing the source, the hash or the truncation registers every device as
+new.
+
 ## Listener Exposure
 
 `_makeRealProfileTask` in `lib/common/task.dart` writes `mixed-port`, `allow-lan`, and `external-controller` into every

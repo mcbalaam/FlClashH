@@ -62,6 +62,11 @@ _Profile _$ProfileFromJson(Map<String, dynamic> json) => _Profile(
       : ProfileOverrides.safeFromJson(
           json['overrides'] as Map<String, Object?>,
         ),
+  providerHeaders:
+      (json['providerHeaders'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, e as String),
+      ) ??
+      const {},
 );
 
 Map<String, dynamic> _$ProfileToJson(_Profile instance) => <String, dynamic>{
@@ -82,6 +87,7 @@ Map<String, dynamic> _$ProfileToJson(_Profile instance) => <String, dynamic>{
   'matchTarget': instance.matchTarget,
   'order': instance.order,
   'overrides': instance.overrides,
+  'providerHeaders': instance.providerHeaders,
 };
 
 const _$ProfileTypeEnumMap = {

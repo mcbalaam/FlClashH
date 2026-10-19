@@ -941,5 +941,10 @@
   "allReferencedProxies": "Todos los proxies referenciados",
   "allReferencedProxyProviders": "Todos los proveedores de proxies referenciados",
   "showTrayHotkeyHints": "Mostrar atajos en la bandeja",
-  "showTrayHotkeyHintsDesc": "Mostrar el atajo global junto a cada elemento de la bandeja."
+  "showTrayHotkeyHintsDesc": "Mostrar el atajo global junto a cada elemento de la bandeja.",
+  "hwidNotSupported": "La vinculación por HWID no es compatible con esta plataforma.",
+  "hwidMaxDevicesReached": "Límite de dispositivos alcanzado",
+  "sendDeviceDataTitle": "Enviar HWID",
+  "sendDeviceDataDesc": "Enviar el identificador y el modelo del dispositivo al servidor del proveedor proxy.",
+  "support": "Soporte"
 }

@@ -747,6 +747,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "hoursAgo": m33,
     "hoursAgoShort": m34,
     "hue": MessageLookupByLibrary.simpleMessage("색조"),
+    "hwidMaxDevicesReached": MessageLookupByLibrary.simpleMessage(
+      "기기 수 제한에 도달했습니다",
+    ),
+    "hwidNotSupported": MessageLookupByLibrary.simpleMessage(
+      "이 플랫폼에서는 HWID 바인딩이 지원되지 않습니다.",
+    ),
     "icon": MessageLookupByLibrary.simpleMessage("아이콘"),
     "iconRecords": MessageLookupByLibrary.simpleMessage("아이콘 기록"),
     "iconSets": MessageLookupByLibrary.simpleMessage("아이콘 세트"),
@@ -1360,6 +1366,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "selectRuleSet": MessageLookupByLibrary.simpleMessage("규칙 세트를 선택하세요"),
     "selectSplitStrategy": MessageLookupByLibrary.simpleMessage("분할 전략을 선택하세요"),
     "selected": MessageLookupByLibrary.simpleMessage("선택됨"),
+    "sendDeviceDataDesc": MessageLookupByLibrary.simpleMessage(
+      "기기 식별자와 모델을 프록시 제공자 서버로 보냅니다.",
+    ),
+    "sendDeviceDataTitle": MessageLookupByLibrary.simpleMessage("HWID 보내기"),
     "server": MessageLookupByLibrary.simpleMessage("서버"),
     "serviceAbnormalCount": m73,
     "serviceAllAvailable": MessageLookupByLibrary.simpleMessage("모두 사용 가능"),
@@ -1473,6 +1483,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "sudoPasswordTitle": MessageLookupByLibrary.simpleMessage(
       "sudo 비밀번호를 입력하세요",
     ),
+    "support": MessageLookupByLibrary.simpleMessage("지원"),
     "suspended": MessageLookupByLibrary.simpleMessage("일시 중지됨…"),
     "switchProfile": MessageLookupByLibrary.simpleMessage("프로필 전환"),
     "sync": MessageLookupByLibrary.simpleMessage("동기화"),

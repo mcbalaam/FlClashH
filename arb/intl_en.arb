@@ -941,5 +941,10 @@
   "allReferencedProxies": "All referenced proxies",
   "allReferencedProxyProviders": "All referenced proxy providers",
   "showTrayHotkeyHints": "Show hotkey hints in the tray",
-  "showTrayHotkeyHintsDesc": "Show each tray item's global hotkey next to it."
+  "showTrayHotkeyHintsDesc": "Show each tray item's global hotkey next to it.",
+  "hwidNotSupported": "HWID binding is not supported on this platform.",
+  "hwidMaxDevicesReached": "Device limit reached",
+  "sendDeviceDataTitle": "Send HWID",
+  "sendDeviceDataDesc": "Send the device identifier and model to the proxy provider server.",
+  "support": "Support"
 }

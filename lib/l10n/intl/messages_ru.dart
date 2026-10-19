@@ -930,6 +930,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "hoursAgo": m33,
     "hoursAgoShort": m34,
     "hue": MessageLookupByLibrary.simpleMessage("Оттенок"),
+    "hwidMaxDevicesReached": MessageLookupByLibrary.simpleMessage(
+      "Достигнут лимит устройств",
+    ),
+    "hwidNotSupported": MessageLookupByLibrary.simpleMessage(
+      "Привязка по HWID не поддерживается на этой платформе.",
+    ),
     "icon": MessageLookupByLibrary.simpleMessage("Значок"),
     "iconRecords": MessageLookupByLibrary.simpleMessage("История значков"),
     "iconSets": MessageLookupByLibrary.simpleMessage("Наборы значков"),
@@ -1694,6 +1700,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Выберите стратегию распределения",
     ),
     "selected": MessageLookupByLibrary.simpleMessage("Выбрано"),
+    "sendDeviceDataDesc": MessageLookupByLibrary.simpleMessage(
+      "Отправлять идентификатор и модель устройства на сервер прокси-провайдера.",
+    ),
+    "sendDeviceDataTitle": MessageLookupByLibrary.simpleMessage(
+      "Отправлять HWID",
+    ),
     "server": MessageLookupByLibrary.simpleMessage("Сервер"),
     "serviceAbnormalCount": m73,
     "serviceAllAvailable": MessageLookupByLibrary.simpleMessage("Все доступны"),
@@ -1833,6 +1845,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "sudoPasswordTitle": MessageLookupByLibrary.simpleMessage(
       "Введите пароль для sudo",
     ),
+    "support": MessageLookupByLibrary.simpleMessage("Поддержка"),
     "suspended": MessageLookupByLibrary.simpleMessage("Приостановлено…"),
     "switchProfile": MessageLookupByLibrary.simpleMessage("Сменить профиль"),
     "sync": MessageLookupByLibrary.simpleMessage("Синхронизация"),

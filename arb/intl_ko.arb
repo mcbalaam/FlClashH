@@ -941,5 +941,10 @@
   "allReferencedProxies": "참조된 모든 프록시",
   "allReferencedProxyProviders": "참조된 모든 프록시 공급자",
   "showTrayHotkeyHints": "트레이에 단축키 힌트 표시",
-  "showTrayHotkeyHintsDesc": "각 트레이 항목 옆에 전역 단축키를 표시합니다."
+  "showTrayHotkeyHintsDesc": "각 트레이 항목 옆에 전역 단축키를 표시합니다.",
+  "hwidNotSupported": "이 플랫폼에서는 HWID 바인딩이 지원되지 않습니다.",
+  "hwidMaxDevicesReached": "기기 수 제한에 도달했습니다",
+  "sendDeviceDataTitle": "HWID 보내기",
+  "sendDeviceDataDesc": "기기 식별자와 모델을 프록시 제공자 서버로 보냅니다.",
+  "support": "지원"
 }
