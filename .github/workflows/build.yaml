@@ -445,6 +445,20 @@ jobs:
           ANDROID_NDK_HOME: ${{ steps.build-ndk.outputs.ndk-path }}
         run: dart setup.dart ${{ matrix.platform }} ${{ env.IS_STABLE == 'true' && '--env stable' || '' }} -v
 
+      - name: Package Linux tarball
+        if: matrix.platform == 'linux'
+        shell: bash
+        run: |
+          version=$(sed -n 's/^version: \([0-9]*\.[0-9]*\.[0-9]*\).*/\1/p' pubspec.yaml)
+          case "${{ matrix.arch }}" in
+            arm64) flutter_arch=arm64 ;;
+            *) flutter_arch=x64 ;;
+          esac
+          tar -C "build/linux/${flutter_arch}/release" \
+            --transform 's,^bundle,FlClash,' \
+            --owner=0 --group=0 --numeric-owner \
+            -cJf "dist/FlClash-${version}-linux-${{ matrix.arch }}.tar.xz" bundle
+
       - name: Upload
         uses: actions/upload-artifact@v4
         with:
